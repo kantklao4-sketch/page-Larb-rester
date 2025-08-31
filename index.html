@@ -1,0 +1,505 @@
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แดชบอร์ดเมนูวันนี้</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #fcf8f0;
+    transition: background-color 0.3s ease;
+  }
+  .text-dark-brown {
+    color: #4b382d;
+  }
+  .bg-primary {
+    background-color: #f2a900;
+  }
+  .border-primary {
+    border-color: #f2a900;
+  }
+  .menu-item-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .menu-item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  .out-of-stock .menu-text {
+    opacity: 0.5;
+    text-decoration: line-through;
+    text-decoration-color: #e57373;
+    text-decoration-thickness: 2px;
+  }
+  .out-of-stock .radio-label {
+    opacity: 0.5;
+  }
+  .out-of-stock .radio-input[value="available"] {
+    display: none;
+  }
+  .out-of-stock .radio-input[value="unavailable"] {
+    display: block;
+  }
+  .icon-btn {
+    transition: transform 0.2s ease;
+  }
+  .icon-btn:hover {
+    transform: scale(1.1);
+  }
+  .loading-indicator {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  .loading-spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #f2a900;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+<div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 md:p-10 mb-8 transform transition-all duration-300">
+<header class="text-center mb-8">
+<h1 class="text-5xl md:text-6xl font-extrabold text-dark-brown drop-shadow-sm">ครัวแม่วัฒน์</h1>
+<p class="text-xl md:text-2xl text-gray-600 mt-2 font-semibold">ต้นตำรับอีสานแท้...รสชาติที่คิดถึง</p>
+</header>
+
+<!-- ส่วนของแดชบอร์ดเมนู -->
+<section class="mb-8">
+<div class="flex flex-col md:flex-row justify-between items-center border-b-2 border-primary pb-2 mb-6">
+<h2 class="text-3xl md:text-4xl font-bold text-dark-brown">กระดานเมนูวันนี้</h2>
+<p id="current-date" class="text-lg md:text-xl text-dark-brown font-semibold mt-2 md:mt-0"></p>
+</div>
+
+<div id="menu-list" class="flex flex-col gap-5">
+<!-- กล่องเมนู: ส้มวัว -->
+<div id="item-somwua" class="menu-item menu-item-card flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-xl p-4 shadow-sm">
+<div class="flex-grow menu-text">
+<h3 class="text-xl font-bold text-dark-brown">ส้มวัว</h3>
+<p id="desc-somwua" class="mt-1 text-gray-700">รสชาติกลมกล่อมตามแบบฉบับอีสานขนานแท้</p>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center space-x-4 text-sm text-gray-700">
+<button class="generate-desc-btn bg-primary text-white rounded-full p-2 text-xs font-bold shadow-md hover:bg-yellow-600 transition-colors">
+<div class="loading-indicator">
+<div class="loading-spinner"></div>
+</div>
+<span class="btn-text">สร้างคำบรรยาย</span>
+</button>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-somwua" value="available" checked class="h-4 w-4 text-green-500 focus:ring-green-400 radio-input">
+<span class="ml-2">มีจำหน่าย</span>
+</label>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-somwua" value="unavailable" class="h-4 w-4 text-red-500 focus:ring-red-400 radio-input">
+<span class="ml-2">ไม่มีจำหน่าย</span>
+</label>
+</div>
+</div>
+
+<!-- กล่องเมนู: เนื้อแดดเดียวทอด -->
+<div id="item-neudad" class="menu-item menu-item-card flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-xl p-4 shadow-sm">
+<div class="flex-grow menu-text">
+<h3 class="text-xl font-bold text-dark-brown">เนื้อแดดเดียวทอด</h3>
+<p id="desc-neudad" class="mt-1 text-gray-700">ทอดด้วยหม้อทอดไร้น้ำมัน กรอบนอกนุ่มใน</p>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center space-x-4 text-sm text-gray-700">
+<button class="generate-desc-btn bg-primary text-white rounded-full p-2 text-xs font-bold shadow-md hover:bg-yellow-600 transition-colors">
+<div class="loading-indicator">
+<div class="loading-spinner"></div>
+</div>
+<span class="btn-text">สร้างคำบรรยาย</span>
+</button>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-neudad" value="available" checked class="h-4 w-4 text-green-500 focus:ring-green-400 radio-input">
+<span class="ml-2">มีจำหน่าย</span>
+</label>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-neudad" value="unavailable" class="h-4 w-4 text-red-500 focus:ring-red-400 radio-input">
+<span class="ml-2">ไม่มีจำหน่าย</span>
+</label>
+</div>
+</div>
+
+<!-- กล่องเมนู: ลาบ -->
+<div id="item-larb" class="menu-item menu-item-card flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-xl p-4 shadow-sm">
+<div class="flex-grow menu-text">
+<h3 class="text-xl font-bold text-dark-brown">ลาบ</h3>
+<p id="desc-larb" class="mt-1 text-gray-700">จัดเต็มเมนูยอดฮิต ปรุงสดใหม่ตามสั่ง</p>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center space-x-4 text-sm text-gray-700">
+<button class="generate-desc-btn bg-primary text-white rounded-full p-2 text-xs font-bold shadow-md hover:bg-yellow-600 transition-colors">
+<div class="loading-indicator">
+<div class="loading-spinner"></div>
+</div>
+<span class="btn-text">สร้างคำบรรยาย</span>
+</button>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-larb" value="available" checked class="h-4 w-4 text-green-500 focus:ring-green-400 radio-input">
+<span class="ml-2">มีจำหน่าย</span>
+</label>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-larb" value="unavailable" class="h-4 w-4 text-red-500 focus:ring-red-400 radio-input">
+<span class="ml-2">ไม่มีจำหน่าย</span>
+</label>
+</div>
+</div>
+
+<!-- กล่องเมนู: ก้อย -->
+<div id="item-koi" class="menu-item menu-item-card flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-xl p-4 shadow-sm">
+<div class="flex-grow menu-text">
+<h3 class="text-xl font-bold text-dark-brown">ก้อย</h3>
+<p id="desc-koi" class="mt-1 text-gray-700">จัดเต็มเมนูยอดฮิต ปรุงสดใหม่ตามสั่ง</p>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center space-x-4 text-sm text-gray-700">
+<button class="generate-desc-btn bg-primary text-white rounded-full p-2 text-xs font-bold shadow-md hover:bg-yellow-600 transition-colors">
+<div class="loading-indicator">
+<div class="loading-spinner"></div>
+</div>
+<span class="btn-text">สร้างคำบรรยาย</span>
+</button>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-koi" value="available" checked class="h-4 w-4 text-green-500 focus:ring-green-400 radio-input">
+<span class="ml-2">มีจำหน่าย</span>
+</label>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-koi" value="unavailable" class="h-4 w-4 text-red-500 focus:ring-red-400 radio-input">
+<span class="ml-2">ไม่มีจำหน่าย</span>
+</label>
+</div>
+</div>
+
+<!-- กล่องเมนู: ต้ม -->
+<div id="item-tom" class="menu-item menu-item-card flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-xl p-4 shadow-sm">
+<div class="flex-grow menu-text">
+<h3 class="text-xl font-bold text-dark-brown">ต้ม</h3>
+<p id="desc-tom" class="mt-1 text-gray-700">จัดเต็มเมนูยอดฮิต ปรุงสดใหม่ตามสั่ง</p>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center space-x-4 text-sm text-gray-700">
+<button class="generate-desc-btn bg-primary text-white rounded-full p-2 text-xs font-bold shadow-md hover:bg-yellow-600 transition-colors">
+<div class="loading-indicator">
+<div class="loading-spinner"></div>
+</div>
+<span class="btn-text">สร้างคำบรรยาย</span>
+</button>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-tom" value="available" checked class="h-4 w-4 text-green-500 focus:ring-green-400 radio-input">
+<span class="ml-2">มีจำหน่าย</span>
+</label>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-tom" value="unavailable" class="h-4 w-4 text-red-500 focus:ring-red-400 radio-input">
+<span class="ml-2">ไม่มีจำหน่าย</span>
+</label>
+</div>
+</div>
+
+<!-- กล่องเมนู: ส้มหมู -->
+<div id="item-sommoo" class="menu-item menu-item-card flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-xl p-4 shadow-sm">
+<div class="flex-grow menu-text">
+<h3 class="text-xl font-bold text-dark-brown">ส้มหมู</h3>
+<p id="desc-sommoo" class="mt-1 text-gray-700">จัดเต็มเมนูยอดฮิต ปรุงสดใหม่ตามสั่ง</p>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center space-x-4 text-sm text-gray-700">
+<button class="generate-desc-btn bg-primary text-white rounded-full p-2 text-xs font-bold shadow-md hover:bg-yellow-600 transition-colors">
+<div class="loading-indicator">
+<div class="loading-spinner"></div>
+</div>
+<span class="btn-text">สร้างคำบรรยาย</span>
+</button>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-sommoo" value="available" checked class="h-4 w-4 text-green-500 focus:ring-green-400 radio-input">
+<span class="ml-2">มีจำหน่าย</span>
+</label>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-sommoo" value="unavailable" class="h-4 w-4 text-red-500 focus:ring-red-400 radio-input">
+<span class="ml-2">ไม่มีจำหน่าย</span>
+</label>
+</div>
+</div>
+
+<!-- กล่องเมนู: แจ่ว มะกอก -->
+<div id="item-jaewmakok" class="menu-item menu-item-card flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-xl p-4 shadow-sm">
+<div class="flex-grow menu-text">
+<h3 class="text-xl font-bold text-dark-brown">แจ่ว มะกอก</h3>
+<p id="desc-jaewmakok" class="mt-1 text-gray-700">รสชาติเผ็ดจัดจ้านตามแบบฉบับอีสานแท้</p>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center space-x-4 text-sm text-gray-700">
+<button class="generate-desc-btn bg-primary text-white rounded-full p-2 text-xs font-bold shadow-md hover:bg-yellow-600 transition-colors">
+<div class="loading-indicator">
+<div class="loading-spinner"></div>
+</div>
+<span class="btn-text">สร้างคำบรรยาย</span>
+</button>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-jaewmakok" value="available" checked class="h-4 w-4 text-green-500 focus:ring-green-400 radio-input">
+<span class="ml-2">มีจำหน่าย</span>
+</label>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-jaewmakok" value="unavailable" class="h-4 w-4 text-red-500 focus:ring-red-400 radio-input">
+<span class="ml-2">ไม่มีจำหน่าย</span>
+</label>
+</div>
+</div>
+
+<!-- กล่องเมนู: เมนูพิเศษ ตามฤดูกาล -->
+<div id="item-special" class="menu-item menu-item-card flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-xl p-4 shadow-sm">
+<div class="flex-grow menu-text">
+<!-- ส่วนแสดงผล -->
+<div id="text-display" class="flex items-center gap-2">
+<h3 id="special-menu-title" class="text-xl font-bold text-dark-brown">
+<span class="align-middle">เมนูพิเศษ ตามฤดูกาล</span>
+</h3>
+<button id="edit-special-menu" class="icon-btn p-1 rounded-full text-gray-600 hover:bg-gray-200 transition-colors">
+<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zm-3.5 3.5a.5.5 0 01.5.5v4.5a.5.5 0 01-.5.5h-4.5a.5.5 0 01-.5-.5v-4.5a.5.5 0 01.5-.5h4.5zM15 11a1 1 0 100 2 1 1 0 000-2z" />
+<path fill-rule="evenodd" d="M12.929 6.071l-6.25 6.25A2 2 0 006 13.5v2.5h2.5a2 2 0 001.414-.5l6.25-6.25a2 2 0 000-2.828l-2.828-2.828a2 2 0 00-2.828 0z" clip-rule="evenodd" />
+</svg>
+</button>
+</div>
+
+<!-- ส่วนแก้ไข -->
+<div id="text-edit-container" class="hidden flex items-center gap-2 mt-2">
+<input type="text" id="special-menu-input" class="flex-grow border rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+<button id="save-special-menu" class="icon-btn text-green-600 hover:bg-green-100">
+<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+</svg>
+</button>
+<button id="cancel-special-menu" class="icon-btn text-red-600 hover:bg-red-100">
+<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+</svg>
+</button>
+</div>
+
+<!-- ส่วนแสดงข้อความที่แก้ไข -->
+<div id="text-display-content" class="text-xl font-bold text-gray-700 mt-2 flex items-center gap-2">
+<span id="special-menu-text" class="italic">วันนี้มี "..."</span>
+</div>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center space-x-4 text-sm text-gray-700">
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-special" value="available" checked class="h-4 w-4 text-green-500 focus:ring-green-400 radio-input">
+<span class="ml-2">มีจำหน่าย</span>
+</label>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-special" value="unavailable" class="h-4 w-4 text-red-500 focus:ring-red-400 radio-input">
+<span class="ml-2">ไม่มีจำหน่าย</span>
+</label>
+</div>
+</div>
+
+<!-- กล่องเมนู: ข้าวเหนียวนึ่งร้อนๆ -->
+<div id="item-khaoniao" class="menu-item menu-item-card flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 rounded-xl p-4 shadow-sm">
+<div class="flex-grow menu-text">
+<h3 class="text-xl font-bold text-dark-brown">ข้าวเหนียวนึ่งร้อนๆ</h3>
+<p id="desc-khaoniao" class="mt-1 text-gray-700">เพียงห่อละ 10 บาท</p>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center space-x-4 text-sm text-gray-700">
+<button class="generate-desc-btn bg-primary text-white rounded-full p-2 text-xs font-bold shadow-md hover:bg-yellow-600 transition-colors">
+<div class="loading-indicator">
+<div class="loading-spinner"></div>
+</div>
+<span class="btn-text">สร้างคำบรรยาย</span>
+</button>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-khaoniao" value="available" checked class="h-4 w-4 text-green-500 focus:ring-green-400 radio-input">
+<span class="ml-2">มีจำหน่าย</span>
+</label>
+<label class="inline-flex items-center radio-label">
+<input type="radio" name="status-khaoniao" value="unavailable" class="h-4 w-4 text-red-500 focus:ring-red-400 radio-input">
+<span class="ml-2">ไม่มีจำหน่าย</span>
+</label>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ส่วนของข้อมูลติดต่อ -->
+<section class="text-center">
+<h2 class="text-2xl md:text-3xl font-bold text-dark-brown border-t-2 border-primary pt-2 mt-8">ติดต่อเรา</h2>
+<p class="mt-4 text-lg text-gray-700">
+**ที่อยู่:** ตลาดกุดหว้าประชารัฐ
+</p>
+<p class="mt-2 text-lg text-gray-700">
+**เวลาทำการ:** เปิดทุกวัน 09:00 - 20:00 น. (หยุดวันพระ)
+</p>
+<p class="mt-4 text-lg text-gray-700">
+**สอบถามเพิ่มเติมหรือสั่งซื้อ:**
+<a href="https://lin.ee/Zl9DFFX" class="text-blue-500 hover:underline font-semibold" target="_blank">
+LINE: https://lin.ee/Zl9DFFX
+</a>
+</p>
+</section>
+</div>
+
+<script>
+// API Key for Gemini
+const apiKey = "";
+const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=" + apiKey;
+
+// Helper function for exponential backoff
+async function fetchWithBackoff(url, options, retries = 5, delay = 1000) {
+  try {
+    const response = await fetch(url, options);
+    if (response.status === 429 && retries > 0) {
+      console.log(`Rate limit exceeded. Retrying in ${delay}ms...`);
+      await new Promise(res => setTimeout(res, delay));
+      return fetchWithBackoff(url, options, retries - 1, delay * 2);
+    }
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+}
+
+// Function to call Gemini API to generate food description
+async function generateDescription(foodName) {
+  const prompt = `เขียนคำบรรยายสั้นๆ ที่น่าสนใจและดึงดูดใจสำหรับเมนูอาหารอีสานชื่อ "${foodName}" โดยเน้นรสชาติและวัตถุดิบ`;
+  
+  const payload = {
+    contents: [{ parts: [{ text: prompt }] }],
+    systemInstruction: {
+        parts: [{ text: "เป็นผู้เชี่ยวชาญด้านอาหารอีสานและนักการตลาด" }]
+    },
+    tools: [{"google_search": {}}],
+  };
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  };
+
+  try {
+    const result = await fetchWithBackoff(apiUrl, options);
+    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || "ไม่สามารถสร้างคำบรรยายได้";
+    return text.trim();
+  } catch (error) {
+    console.error("Failed to generate content:", error);
+    return "ไม่สามารถสร้างคำบรรยายได้";
+  }
+}
+
+// Attach event listeners to all generate buttons
+const attachGenerateButtonListeners = () => {
+  const generateButtons = document.querySelectorAll('.generate-desc-btn');
+  generateButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+      const parentDiv = button.closest('.menu-item');
+      const foodName = parentDiv.querySelector('h3').textContent;
+      const descElement = parentDiv.querySelector('p');
+      const loadingIndicator = button.querySelector('.loading-indicator');
+      const btnText = button.querySelector('.btn-text');
+
+      loadingIndicator.style.display = 'flex';
+      btnText.style.display = 'none';
+
+      const generatedDesc = await generateDescription(foodName);
+      descElement.textContent = generatedDesc;
+      
+      loadingIndicator.style.display = 'none';
+      btnText.style.display = 'block';
+    });
+  });
+};
+
+// กำหนดวันที่ปัจจุบันในรูปแบบภาษาไทย
+const setThaiDate = () => {
+const dateElement = document.getElementById('current-date');
+if (dateElement) {
+const now = new Date();
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+dateElement.textContent = `วันที่ ${now.toLocaleDateString('th-TH', options)}`;
+}
+};
+
+// จัดการสถานะเมื่อมีการเปลี่ยนตัวเลือก
+const handleRadioButtons = () => {
+const radioGroups = document.querySelectorAll('input[type="radio"]');
+radioGroups.forEach(radio => {
+radio.addEventListener('change', (event) => {
+const menuItem = event.target.closest('.menu-item');
+if (event.target.value === 'unavailable') {
+menuItem.classList.add('out-of-stock');
+} else {
+menuItem.classList.remove('out-of-stock');
+}
+});
+
+// กำหนดสถานะเริ่มต้นเมื่อโหลดหน้า
+const menuItem = radio.closest('.menu-item');
+if (radio.checked && radio.value === 'unavailable') {
+menuItem.classList.add('out-of-stock');
+}
+});
+};
+
+// จัดการการแก้ไขข้อความเมนูพิเศษ
+const handleSpecialMenuEdit = () => {
+const specialMenuText = document.getElementById('special-menu-text');
+const editButton = document.getElementById('edit-special-menu');
+const textDisplay = document.getElementById('text-display');
+const textEditContainer = document.getElementById('text-edit-container');
+const textDisplayContent = document.getElementById('text-display-content');
+const inputField = document.getElementById('special-menu-input');
+const saveButton = document.getElementById('save-special-menu');
+const cancelButton = document.getElementById('cancel-special-menu');
+
+// โหลดข้อความจาก localStorage เมื่อหน้าเว็บโหลด
+const savedText = localStorage.getItem('specialMenuText');
+if (savedText) {
+specialMenuText.textContent = savedText;
+}
+
+// แสดงหน้าต่างแก้ไขเมื่อกดปุ่ม "แก้ไข"
+editButton.addEventListener('click', () => {
+textDisplay.classList.add('hidden');
+textDisplayContent.classList.add('hidden');
+textEditContainer.classList.remove('hidden');
+inputField.value = specialMenuText.textContent;
+});
+
+// บันทึกข้อความและซ่อนหน้าต่างแก้ไขเมื่อกด "บันทึก"
+saveButton.addEventListener('click', () => {
+const newText = inputField.value.trim();
+specialMenuText.textContent = newText ? newText : 'วันนี้มี "..."';
+localStorage.setItem('specialMenuText', specialMenuText.textContent);
+textDisplay.classList.remove('hidden');
+textDisplayContent.classList.remove('hidden');
+textEditContainer.classList.add('hidden');
+});
+
+// ยกเลิกการแก้ไขและซ่อนหน้าต่างแก้ไขเมื่อกด "ยกเลิก"
+cancelButton.addEventListener('click', () => {
+textDisplay.classList.remove('hidden');
+textDisplayContent.classList.remove('hidden');
+textEditContainer.classList.add('hidden');
+});
+};
+
+window.onload = () => {
+setThaiDate();
+handleRadioButtons();
+handleSpecialMenuEdit();
+attachGenerateButtonListeners();
+};
+</script>
+</body>
+</html>
